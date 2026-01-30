@@ -142,3 +142,12 @@ def download_batch(urls, fmt, quality, job_id):
         progress = int(((idx + 1) / total) * 100) if total else 100
         # update_job_progress(job_id, progress, results=results)
     # update_job_progress(job_id, 100, results=results)
+
+if __name__ == "__main__":
+    # Example usage
+    test_url = "https://www.youtube.com/watch?v=DxsDekHDKXo"
+    try:
+        file_id = download_and_convert(test_url, "mp3", 320)
+        print(f"Downloaded and converted file ID: {file_id}")
+    except Exception as e:
+        print(f"Error: {e}")

@@ -3,12 +3,14 @@ Static GUI prototype for SmuggyConverter.
 Built with PySide6. No download/conversion functionality is wired yet.
 """
 from pathlib import Path
+
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont, QIcon
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
     QApplication,
     QButtonGroup,
     QComboBox,
+    QFileDialog,
     QFrame,
     QHBoxLayout,
     QLabel,
@@ -19,7 +21,7 @@ from PySide6.QtWidgets import (
     QStackedLayout,
     QVBoxLayout,
     QWidget,
-    QSystemTrayIcon
+    QSystemTrayIcon,
 )
 
 ICON_PATH = "logo.png"
@@ -27,7 +29,6 @@ ICO_ICON_PATH = "icon.ico"
 
 icon_path = Path(__file__).with_name(ICON_PATH)
 ico_icon_path = Path(__file__).with_name(ICO_ICON_PATH)
-
 
 class ConverterWindow(QMainWindow):
     def __init__(self) -> None:
@@ -37,6 +38,7 @@ class ConverterWindow(QMainWindow):
             self.setWindowIcon(QIcon(str(icon_path)))
         self.resize(1180, 760)
         self.setMinimumSize(960, 600)
+        self.output_dir = None
         self._apply_theme()
         self._build_ui()
 
@@ -170,6 +172,16 @@ class ConverterWindow(QMainWindow):
         card_layout.setContentsMargins(18, 18, 18, 18)
         card_layout.setSpacing(14)
 
+        output_label = QLabel("Output Folder Path:")
+        self.output_path_edit = QLineEdit(str(self.output_dir))
+        self.output_path_edit.setReadOnly(True)
+        browse_btn = QPushButton("Browse")
+        browse_btn.clicked.connect(self._choose_output_dir)
+        output_row = QHBoxLayout()
+        output_row.setSpacing(8)
+        output_row.addWidget(self.output_path_edit)
+        output_row.addWidget(browse_btn)
+
         url_label = QLabel("YouTube Video URL:")
         url_input = QLineEdit()
         url_input.setPlaceholderText("https://www.youtube.com/watch?v=...")
@@ -185,6 +197,8 @@ class ConverterWindow(QMainWindow):
 
         form_grid = QVBoxLayout()
         form_grid.setSpacing(10)
+        form_grid.addWidget(output_label)
+        form_grid.addLayout(output_row)
         form_grid.addWidget(url_label)
         form_grid.addWidget(url_input)
         form_grid.addWidget(format_label)
@@ -194,6 +208,12 @@ class ConverterWindow(QMainWindow):
 
         card_layout.addLayout(form_grid)
         return card
+
+    def _choose_output_dir(self) -> None:
+        selected = QFileDialog.getExistingDirectory(self, "Select Output Folder", str(self.output_dir))
+        if selected:
+            self.output_dir = Path(selected)
+            self.output_path_edit.setText(str(self.output_dir))
 
     def _footer(self) -> QVBoxLayout:
         layout = QVBoxLayout()

@@ -30,7 +30,7 @@ from PySide6.QtWidgets import (
 )
 
 from downloader import download_and_convert, download_playlist
-from extractor import extract_playlist_info
+from playlist import extract_playlist_info
 from config import ICON_PATH, ICO_ICON_PATH, OUTPUT_DIR_FILE
 
 class SpinnerWidget(QWidget):

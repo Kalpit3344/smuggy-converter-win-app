@@ -35,6 +35,7 @@ def resource_path(name):
     if hasattr(sys, "_MEIPASS"):
         return Path(sys._MEIPASS) / name
     return Path(__file__).parent / name
+
 class SpinnerWidget(QWidget):
     """A custom spinning loader widget."""
     

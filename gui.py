@@ -1,5 +1,6 @@
 from pathlib import Path
 import logging
+import sys
 
 from PySide6.QtCore import Qt, QTimer, QThread, Signal, QRectF, QSignalBlocker
 from PySide6.QtGui import QIcon, QPainter, QPen, QColor, QConicalGradient
@@ -30,6 +31,10 @@ from downloader import download_and_convert, download_playlist
 from playlist import extract_playlist_info, extract_video_info_from_array, selected_playlist_videos
 from config import ICON_PATH, ICO_ICON_PATH, OUTPUT_DIR_FILE
 
+def resource_path(name):
+    if hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / name
+    return Path(__file__).parent / name
 class SpinnerWidget(QWidget):
     """A custom spinning loader widget."""
     

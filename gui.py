@@ -36,7 +36,14 @@ def resource_path(name):
         return Path(sys._MEIPASS) / name
     return Path(__file__).parent / name
 
+
+
+def resource_path(name):
+    if hasattr(sys, "_MEIPASS"):
+        return Path(sys._MEIPASS) / name
+    return Path(__file__).parent / name
 class SpinnerWidget(QWidget):
+
     """A custom spinning loader widget."""
     
     def __init__(self, parent=None, color=QColor(230, 80, 80), line_width=4):
@@ -757,6 +764,7 @@ class ConverterWindow(QMainWindow):
 
 def main() -> None:
     app = QApplication([])
+    app.setWindowIcon(QIcon(str(resource_path("icon.ico"))))
     window = ConverterWindow()
     window.showMaximized()
     tray_icon = QSystemTrayIcon(QIcon(str(icon_path)), parent=None)

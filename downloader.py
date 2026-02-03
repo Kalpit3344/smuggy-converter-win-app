@@ -8,6 +8,7 @@ import ffmpeg
 import yt_dlp
 from ffmpeg import Error as FFmpegError
 from file_utils import cleanup_file, generate_uuid_filename, get_media_path, MEDIA_DIR
+from file_utils import sanitize_filename
 # from .job_manager import update_job_progress
 
 METADATA_EXT = ".metadata.json"
@@ -24,19 +25,7 @@ def write_metadata(file_id, base_dir=None):
         os.makedirs(target_dir, exist_ok=True)
     meta_path = os.path.join(target_dir, file_id + METADATA_EXT)
     with open(meta_path, "w") as f:
-        json.dump(metadata, f)
-
-
-def sanitize_filename(title):
-    # Remove invalid filename characters and trim
-    title = re.sub(r'[\\/:*?"<>|]', '', title)
-    # Remove non-ASCII characters
-    title = re.sub(r'[^\x00-\x7F]+', '', title)
-    # Collapse whitespace
-    title = re.sub(r'\s+', ' ', title).strip()
-    # Limit filename length (e.g., 100 chars)
-    return title[:100]
-
+        json.dump(metadata, f)  
 
 def download_and_convert(url, fmt, quality, target_dir=None):
     logger.info("Starting download", extra={"url": url, "fmt": fmt, "quality": quality})

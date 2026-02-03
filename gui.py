@@ -1,7 +1,3 @@
-"""
-Static GUI prototype for SmuggyConverter.
-Built with PySide6. No download/conversion functionality is wired yet.
-"""
 from pathlib import Path
 import logging
 

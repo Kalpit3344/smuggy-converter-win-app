@@ -36,12 +36,6 @@ def resource_path(name):
         return Path(sys._MEIPASS) / name
     return Path(__file__).parent / name
 
-
-
-def resource_path(name):
-    if hasattr(sys, "_MEIPASS"):
-        return Path(sys._MEIPASS) / name
-    return Path(__file__).parent / name
 class SpinnerWidget(QWidget):
 
     """A custom spinning loader widget."""
@@ -674,7 +668,7 @@ class ConverterWindow(QMainWindow):
                     logger.info("User cancelled playlist selection")
                     return
             except Exception as e:
-                logger.error(f"Failed to extract playlist: {e}")
+                logger.error(f"Failed to extract playlist: {str(e)}")
                 self._show_toast(f"Failed to extract playlist: {str(e)}", False)
                 return
         else:

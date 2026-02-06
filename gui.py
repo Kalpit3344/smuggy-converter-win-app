@@ -12,7 +12,6 @@ from PySide6.QtWidgets import (
     QButtonGroup,
     QComboBox,
     QFileDialog,
-    QFrame,
     QHBoxLayout,
     QLabel,
     QLineEdit,
@@ -20,7 +19,6 @@ from PySide6.QtWidgets import (
     QProgressBar,
     QPushButton,
     QSpacerItem,
-    QStackedLayout,
     QVBoxLayout,
     QWidget,
     QSystemTrayIcon,
@@ -29,6 +27,8 @@ from PySide6.QtWidgets import (
     QListWidgetItem,
     QCheckBox,
 )
+
+from gui.default_output_dialog import DefaultOutputDirDialog
 
 from downloader import download_and_convert, download_playlist
 from playlist import extract_playlist_info, extract_video_info_from_array, selected_playlist_videos
@@ -583,14 +583,10 @@ class ConverterWindow(QMainWindow):
                 subprocess.Popen(["xdg-open", path])
 
     def _prompt_initial_output_dir(self) -> None:
-        start_dir = str(self.output_dir) if self.output_dir else str(Path.home())
-        selected = QFileDialog.getExistingDirectory(
-            self,
-            "Please select a default output directory (this is a one time process)",
-            start_dir,
-        )
-        if selected:
-            self.output_dir = Path(selected)
+        start_dir = self.output_dir if self.output_dir else Path.home()
+        dialog = DefaultOutputDirDialog(start_dir, self)
+        if dialog.exec() == QDialog.Accepted and dialog.selected_dir:
+            self.output_dir = dialog.selected_dir
             self.output_path_edit.setText(str(self.output_dir))
             self._save_output_dir()
 

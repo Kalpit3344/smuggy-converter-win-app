@@ -1,6 +1,9 @@
+import os
 from pathlib import Path
 import logging
 import sys
+import subprocess
+import platform
 
 from PySide6.QtCore import Qt, QTimer, QThread, Signal, QRectF, QSignalBlocker
 from PySide6.QtGui import QIcon, QPainter, QPen, QColor, QConicalGradient
@@ -526,10 +529,13 @@ class ConverterWindow(QMainWindow):
         self.output_path_edit.setReadOnly(True)
         browse_btn = QPushButton("Browse")
         browse_btn.clicked.connect(self._choose_output_dir)
+        open_output_dir_btn = QPushButton("Open in Folder")
+        open_output_dir_btn.clicked.connect(self._open_output_dir)
         output_row = QHBoxLayout()
         output_row.setSpacing(8)
         output_row.addWidget(self.output_path_edit)
         output_row.addWidget(browse_btn)
+        output_row.addWidget(open_output_dir_btn)
 
         url_label = QLabel("YouTube Video URL:")
         self.url_input = QLineEdit()
@@ -564,6 +570,17 @@ class ConverterWindow(QMainWindow):
             self.output_dir = Path(selected)
             self.output_path_edit.setText(str(self.output_dir))
             self._save_output_dir()
+    
+    def _open_output_dir(self) -> None:
+        if self.output_dir and self.output_dir.exists():
+
+            path = str(self.output_dir)
+            if platform.system() == "Windows":
+                os.startfile(path)
+            elif platform.system() == "Darwin":  # macOS
+                subprocess.Popen(["open", path])
+            else:  # Linux and others
+                subprocess.Popen(["xdg-open", path])
 
     def _prompt_initial_output_dir(self) -> None:
         start_dir = str(self.output_dir) if self.output_dir else str(Path.home())

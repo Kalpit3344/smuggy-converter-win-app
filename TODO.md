@@ -17,7 +17,7 @@ Features:
 8. Download playlists from Apple Music / Spotify / etc.
 9. Website for outreach and link to .exe and .dmg
 10. - [x] Progress bar to show conversion / download progress
-11. Click to open output folder
+11. - [x] Click to open output folder
 12. Store logs
 13. Auto-update
 14. Popup to show new version available (poll GitHub releases)

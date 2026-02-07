@@ -1,7 +1,7 @@
 from pathlib import Path
 
-ICON_PATH = "logo.png"
-ICO_ICON_PATH = "icon.ico"
+ICON_PATH = "assets/logo.png"
+ICO_ICON_PATH = "assets/icon.ico"
 OUTPUT_DIR_FILE = "output_dir.txt"
 
 icon_path = Path(__file__).with_name(ICON_PATH)

@@ -4,7 +4,7 @@ To refresh the gui automatically by closing and opening the gui , similar to how
 2 : Pyinstaller cmds
 
 Windows :
- pyinstaller --onefile --windowed --icon=icon.ico --add-data "icon.ico;." --clean --name="SmuggyConverter" main.py
+pyinstaller --onefile --windowed --icon=assets/icon.ico --add-data "assets/icon.ico;." --clean --name="SmuggyConverter" main.py
 
 MacOS : 
-pyinstaller --onefile --windowed --icon=icon.icns --add-data "icon.icns:." --clean --name="SmuggyConverter" main.py
+pyinstaller --onefile --windowed --icon=assets/icon.icns --add-data "assets/icon.icns:." --clean --name="SmuggyConverter" main.py

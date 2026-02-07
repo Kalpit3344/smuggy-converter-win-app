@@ -12,9 +12,8 @@ from gui.converter_window import ConverterWindow
 from config import icon_path
 
 def resource_path(name):
-    if hasattr(sys, "_MEIPASS"):
-        return Path(sys._MEIPASS) / name
-    return Path(__file__).parent / name
+    base = Path(sys._MEIPASS) if hasattr(sys, "_MEIPASS") else Path(__file__).parent
+    return base / "assets" / name
 
 logger = logging.getLogger(__name__)
 if not logger.handlers:

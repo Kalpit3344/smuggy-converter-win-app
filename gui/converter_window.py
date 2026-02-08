@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
     QMainWindow,
     QProgressBar,
     QPushButton,
+    QScrollArea,
     QSpacerItem,
     QVBoxLayout,
     QWidget,
@@ -104,10 +105,22 @@ class ConverterWindow(QMainWindow):
             QComboBox QAbstractItemView { background: #0f0f13; selection-background-color: #2d2a2f;
                                           selection-color: #ffffff; }
             QFrame#line { background: #26262c; }
+            QScrollArea {
+                border: none;
+                background: transparent;
+            }
+            QScrollArea > QWidget > QWidget {
+                background: transparent;
+            }
             """
         )
 
     def _build_ui(self) -> None:
+        # Create scroll area
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        
+        # Create central widget for scrolling
         central = QWidget()
         root = QVBoxLayout(central)
         root.setContentsMargins(36, 32, 36, 32)
@@ -123,8 +136,10 @@ class ConverterWindow(QMainWindow):
         root.addWidget(self._form_card())
         root.addItem(QSpacerItem(0, 8))
         root.addLayout(self._footer())
+        root.addStretch()  # Add stretch to push content to top
 
-        self.setCentralWidget(central)
+        scroll.setWidget(central)
+        self.setCentralWidget(scroll)
 
     def _hero(self) -> QVBoxLayout:
         layout = QVBoxLayout()
@@ -189,9 +204,12 @@ class ConverterWindow(QMainWindow):
         output_label = QLabel("Output Folder Path:")
         self.output_path_edit = QLineEdit(str(self.output_dir))
         self.output_path_edit.setReadOnly(True)
+        self.output_path_edit.setMinimumHeight(42)
         browse_btn = QPushButton("Browse")
+        browse_btn.setMinimumHeight(42)
         browse_btn.clicked.connect(self._choose_output_dir)
         open_output_dir_btn = QPushButton("Open in Folder")
+        open_output_dir_btn.setMinimumHeight(42)
         open_output_dir_btn.clicked.connect(self._open_output_dir)
         output_row = QHBoxLayout()
         output_row.setSpacing(8)
@@ -203,16 +221,19 @@ class ConverterWindow(QMainWindow):
         self.url_label = QLabel("YouTube Video URL:")
         self.url_input = QLineEdit()
         self.url_input.setPlaceholderText("https://www.youtube.com/watch?v=...")
+        self.url_input.setMinimumHeight(42)
 
     # Format
         format_label = QLabel("Output Format:")
         self.format_combo = QComboBox()
         self.format_combo.addItems(["MP3 (Audio)"])
+        self.format_combo.setMinimumHeight(42)
 
     # Quality
         quality_label = QLabel("Audio Quality:")
         self.quality_combo = QComboBox()
         self.quality_combo.addItems(["320 kbps (Highest)", "256 kbps", "192 kbps"])
+        self.quality_combo.setMinimumHeight(42)
 
     # Build form layout
         form_grid.addWidget(output_label)
@@ -279,6 +300,7 @@ class ConverterWindow(QMainWindow):
         layout = QVBoxLayout()
         self.convert_btn = QPushButton(self.original_button_text)
         self.convert_btn.setObjectName("convert")
+        self.convert_btn.setMinimumHeight(50)
         self.convert_btn.clicked.connect(self._on_convert_clicked)
         layout.addSpacing(4)
         layout.addWidget(self.convert_btn)

@@ -6,7 +6,7 @@ import subprocess
 #create dir, create file , initialise logger with formatting , add levels , apply logger to file .
 
 FILENAME = "logs.txt"
-FOLDERNAME = "SmuggyConverter_logs"
+FOLDERNAME = ".SmuggyConverter/logs"
 
 home_folder = subprocess.run("echo $HOME", shell=True, capture_output=True, text=True).stdout.strip()
 folder = f"{home_folder}/{FOLDERNAME}"

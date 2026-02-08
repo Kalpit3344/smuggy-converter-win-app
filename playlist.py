@@ -12,8 +12,9 @@ def extract_playlist_info(url):
     ydl_opts = {
         "extract_flat": True,
         "skip_download": True,
-        "quiet": True,
+        "quiet": False,
         "ignoreerrors": True,
+        "logger": logger,
     }
     final_array = []
     playlist_title = "playlist"
@@ -99,8 +100,9 @@ def selected_playlist_videos(playlist_title, videos_dict, fmt, quality, target_d
                 "outtmpl": temp_path,
                 "format": "bestaudio/best",
                 "noplaylist": True,
-                "quiet": True,
+                "quiet": False,
                 "ignoreerrors": False,
+                "logger": logger,
             }
             with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                 info = ydl.extract_info(value, download=True)

@@ -26,4 +26,9 @@ file_handler.setFormatter(formatter)
 
 logger.addHandler(file_handler)
 
+# Configure yt-dlp logger to capture warnings and errors
+ytdlp_logger = logging.getLogger('yt_dlp')
+ytdlp_logger.setLevel(logging.DEBUG)
+ytdlp_logger.addHandler(file_handler)
+
 logger.info("Logger initialized") 

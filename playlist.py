@@ -7,6 +7,7 @@ from ffmpeg import Error as FFmpegError
 
 from file_utils import MEDIA_DIR, sanitize_filename, cleanup_file
 from logs import logger
+from config import FFMPEG_PATH
 
 def extract_playlist_info(url):
     ydl_opts = {
@@ -31,7 +32,10 @@ def extract_playlist_info(url):
                     beech_ka_array = []
                     beech_ka_array.append(f"https://www.youtube.com/watch?v={entry['id']}")
                     beech_ka_array.append(entry.get("title", "Unknown"))
-                    time = str(datetime.timedelta(seconds=entry.get("duration", 0)))
+                    duration = entry.get("duration")
+                    if duration is None:
+                        duration = 0
+                    time = str(datetime.timedelta(seconds=duration))
                     beech_ka_array.append(time)
                     final_array.append(beech_ka_array)
         #     print(final_array)
@@ -41,9 +45,7 @@ def extract_playlist_info(url):
         return playlist_title, final_array
     except Exception as e:
         logger.error(f"Failed to extract playlist: {e}")
-        return {
-            "error": str(e)
-        }
+        return None, []
     
 def extract_video_info_from_array(final_array):
     videos_dict = {}
@@ -123,7 +125,11 @@ def selected_playlist_videos(playlist_title, videos_dict, fmt, quality, target_d
                             ffmpeg
                             .input(downloaded_path)
                             .output(target_path, audio_bitrate=f"{quality}k" if quality else "320k", format="mp3", acodec="libmp3lame")
-                            .run(overwrite_output=True, capture_stdout=True, capture_stderr=True)
+                            .run(
+                                cmd=FFMPEG_PATH,
+                                overwrite_output=True, 
+                                capture_stdout=True, 
+                                capture_stderr=True)
                         )
                     except FFmpegError as fe:
                         cleanup_file(downloaded_path)
